@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python2
 
 import numpy as np
 import os
@@ -48,10 +48,20 @@ class Network:
         self.batch_size = 200
     
     def build_network(self, input_data):
+	'''
+	network layers:
+	-input (3, 32, 32)
+	-convolutional 2D (3, 10, 10)
+	-convolutional 2D (3, 10, 10)
+	-softmax (50)
+	-softmax (25)
+	'''
         network = lasagne.layers.InputLayer((None, 3, 32, 32), input_var=input_data)
-        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), 
+			nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_1, pool_size=(2, 2))
-        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), 
+			nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_2, pool_size=(2, 2))
         network = lasagne.layers.DenseLayer(network, num_units=50, nonlinearity=lasagne.nonlinearities.softmax)
         network = lasagne.layers.DenseLayer(network, num_units=25, nonlinearity=lasagne.nonlinearities.softmax)
@@ -118,7 +128,7 @@ class Network:
         train_function = theano.function([input_data, labels], loss, updates=self.updates('sgd', loss, 0.3))
         validation_function = theano.function([input_data, labels], loss_test)   # good?
         
-        print("Traning progress:")
+        print("Training progress:")
         print("(epoch, training error, validation error)")
         for epoch in range(max_epochs):
             training_loss = 0
@@ -140,7 +150,10 @@ class Network:
         
         self.get_conv_filters()
         #~ print("Test error: {:.6f}".format(validation_function(input_batch, labels_batch)))
-                
+
+'''
+NETWORK TRAINING AND TESTING
+'''		
 net = Network()
 net.load_data()
 net.train(30)
