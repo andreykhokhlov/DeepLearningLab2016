@@ -105,22 +105,18 @@ class Network:
             
     
 class Trainer:
-	def __init__(self, net):
-		
-		
-		net.load_data()
+    def __init__(self, net):
+        net.load_data()
         
         input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
-		deterministic = True
         net.build_network(input_var)
-		test_pred = net.predict(deterministic)
+        test_pred = net.predict(deterministic = True)
         loss = net.loss(labels)
         loss_test = net.loss_test(labels)
-		test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
+        test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
         train_function = theano.function([input_var, labels], loss, updates=self.updates('sgd', loss, 0.3))
         validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
-		
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs):
         
@@ -132,7 +128,6 @@ class Trainer:
             training_loss = 0
             count = 0
             num_of_training_batches = 0
-			
             for input_batch, labels_batch in net.batches(net.train_images[:2000,:,:,:], net.train_labels[:2000,20], net.batch_size):
                 training_loss += train_function(input_batch, labels_batch)
                 count += 1
@@ -152,7 +147,7 @@ class Trainer:
 
 '''
 NETWORK TRAINING AND TESTING
-'''		
+'''
 net = Network()
 trainer = Trainer()
 train.train(100)
