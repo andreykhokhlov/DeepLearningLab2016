@@ -119,9 +119,6 @@ class Trainer:
         validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs):
-        
-        
-        
         print("Training ...")
         print("(epoch, training error, validation error)")
         for epoch in range(max_epochs):
