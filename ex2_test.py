@@ -114,10 +114,10 @@ class Network:
         input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
         self.build_network(input_var)
-		test_prediction = lasagne.layers.get_output(self.network, deterministic=True)
+		test_pred = predict(deterministic=True)
         loss = self.loss(labels)
         loss_test = self.loss_test(labels)
-		test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1), target_var), dtype=theano.config.floatX)
+		test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
         train_function = theano.function([input_var, labels], loss, updates=self.updates('sgd', loss, 0.3))
         validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
         
