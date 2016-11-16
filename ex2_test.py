@@ -105,7 +105,7 @@ class Network:
             
     
 class Trainer:
-    def __init__(self, net):
+    def __init__(self, net, batch_size):
         net.load_data()
         
         self.input_var = T.tensor4('inputs')
@@ -129,7 +129,7 @@ class Trainer:
             count = 0
             num_of_training_batches = 0
             start_time = time.time()
-            for input_batch, labels_batch in self.batches(self.train_images[:TRAINING_SET_SIZE,:,:,:], self.train_labels[:TRAINING_SET_SIZE,20], batch_size):
+            for input_batch, labels_batch in net.batches(net.train_images[:TRAINING_SET_SIZE,:,:,:], self.train_labels[:TRAINING_SET_SIZE,20], batch_size):
                 start_time_batch = time.time()
                 training_loss += self.train_function(input_batch, labels_batch)
                 count += 1
@@ -139,7 +139,7 @@ class Trainer:
             count = 0
             validation_loss = 0
             validation_accuracy = 0
-            for input_batch, labels_batch in self.batches(self.val_images[:VALIDATION_SET_SIZE,:,:,:], self.val_labels[:VALIDATION_SET_SIZE,20], batch_size):
+            for input_batch, labels_batch in net.batches(net.val_images[:VALIDATION_SET_SIZE,:,:,:], self.val_labels[:VALIDATION_SET_SIZE,20], batch_size):
                 val_err, val_acc = self.validation_function(input_batch, labels_batch)
                 validation_accuracy += val_acc
                 validation_loss += val_err
@@ -157,5 +157,5 @@ NETWORK TRAINING AND TESTING
 '''
 net = Network()
 trainer = Trainer(net)
-trainer.train(100)
+trainer.train(100, 100)
 
