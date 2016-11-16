@@ -1,6 +1,9 @@
+'''
 #!/usr/bin/env python2
+'''
 
 import numpy as np
+
 import os
 
 import theano
@@ -57,11 +60,9 @@ class Network:
 	-softmax (25)
 	'''
         network = lasagne.layers.InputLayer((None, 3, 32, 32), input_var=input_data)
-        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), 
-			nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_1, pool_size=(2, 2))
-        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), 
-			nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_2, pool_size=(2, 2))
         network = lasagne.layers.DenseLayer(network, num_units=50, nonlinearity=lasagne.nonlinearities.softmax)
         network = lasagne.layers.DenseLayer(network, num_units=25, nonlinearity=lasagne.nonlinearities.softmax)
@@ -102,6 +103,7 @@ class Network:
 
     def get_conv_filters(self):
         from PIL import Image
+
         for (i, cl) in enumerate(self.conv_layers):
             params = cl.get_params()[0].get_value()  #I guess get_params()[1] is the bias, TODO: sum the bias...
             print(params.shape)
