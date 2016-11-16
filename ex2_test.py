@@ -121,7 +121,7 @@ class Trainer:
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs, batch_size):
         print("Training ...")
-         print("( epoch | time | training error | validation error | validation accuracy )")
+        print("( epoch | time | training error | validation error | validation accuracy )")
         TRAINING_SET_SIZE = 10240
         VALIDATION_SET_SIZE = 5120
         for epoch in range(max_epochs):
