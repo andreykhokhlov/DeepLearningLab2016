@@ -1,7 +1,3 @@
-'''
-#!/usr/bin/env python2
-'''
-
 import numpy as np
 
 import os
@@ -9,7 +5,6 @@ import os
 import theano
 import theano.tensor as T
 import lasagne
-
 
 '''
 Image arrays have the shape (N, 3, 32, 32), where N is the size of the
@@ -22,7 +17,6 @@ attributes are stored in self.attr_names.
 '''
 
 data_path = "/home/lmb/Celeb_data"
-
 
 class Network:
     
