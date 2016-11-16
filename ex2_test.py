@@ -46,6 +46,7 @@ class Network:
     
     def build_network(self, input_data):
 
+	#need to check this part very attentively
 		self.network = lasagne.layers.InputLayer(shape = (None, 3, 32, 32), input_var = input_data)
 		self.network = lasagne.layers.Conv2DLayer(network, num_filters = 32, filter_size = (5, 5), nonlinearity = lasagne.nonlinearities.rectify, W = lasagne.init.GlorotUniform())
 		self.network = lasagne.layers.MaxPool2DLayer(network, pool_size = (2, 2))
