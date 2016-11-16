@@ -51,21 +51,14 @@ class Network:
         self.batch_size = 200
     
     def build_network(self, input_data):
-	'''
-	network layers:
-	-input (3, 32, 32)
-	-convolutional 2D (3, 10, 10)
-	-convolutional 2D (3, 10, 10)
-	-softmax (50)
-	-softmax (25)
-	'''
+
         network = lasagne.layers.InputLayer((None, 3, 32, 32), input_var=input_data)
-        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=32, filter_size=(5, 5), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_1, pool_size=(2, 2))
-        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=3, filter_size=(10, 10), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
+        conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=32, filter_size=(5, 5), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_2, pool_size=(2, 2))
-        network = lasagne.layers.DenseLayer(network, num_units=50, nonlinearity=lasagne.nonlinearities.softmax)
-        network = lasagne.layers.DenseLayer(network, num_units=25, nonlinearity=lasagne.nonlinearities.softmax)
+        network = lasagne.layers.DenseLayer(network, num_units=150, nonlinearity=lasagne.nonlinearities.rectify)
+        network = lasagne.layers.DenseLayer(network, num_units=10, nonlinearity=lasagne.nonlinearities.softmax)
         self.network = network
         self.conv_layers = [conv_layer_1, conv_layer_2]
         
