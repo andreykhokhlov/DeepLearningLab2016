@@ -58,6 +58,7 @@ class Network:
         conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=32, filter_size=(5, 5), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_2, pool_size=(2, 2))
         network = lasagne.layers.DenseLayer(network, num_units=150, nonlinearity=lasagne.nonlinearities.rectify)
+		network = lasagne.layers.DenseLayer(network, num_units=50, nonlinearity=lasagne.nonlinearities.rectify)
         network = lasagne.layers.DenseLayer(network, num_units=10, nonlinearity=lasagne.nonlinearities.softmax)
         self.network = network
         self.conv_layers = [conv_layer_1, conv_layer_2]
