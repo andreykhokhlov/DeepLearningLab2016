@@ -116,7 +116,7 @@ class Trainer:
         self.loss_test = net.loss_test(self.labels)
         self.test_acc = T.mean(T.eq(T.argmax(self.test_pred, axis=1), self.labels), dtype=theano.config.floatX)
         self.train_function = theano.function([self.input_var, self.labels], self.loss, updates=net.updates('sgd', self.loss, 0.3))
-        self.validation_function = theano.function([self.input_var, self.labels], [loss_test, test_acc])   #good?
+        self.validation_function = theano.function([self.input_var, self.labels], [self.loss_test, self.test_acc])   #good?
 
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs, batch_size):
