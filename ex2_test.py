@@ -121,9 +121,9 @@ class Trainer:
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs, batch_size):
         print("Training ...")
-        print(" epoch | training error | validation error ")
-        TRAINING_SET_SIZE = 200
-        VALIDATION_SET_SIZE = 50
+         print("( epoch | time | training error | validation error | validation accuracy )")
+        TRAINING_SET_SIZE = 10240
+        VALIDATION_SET_SIZE = 5120
         for epoch in range(max_epochs):
             training_loss = 0
             count = 0
@@ -147,7 +147,7 @@ class Trainer:
             validation_error = validation_loss/count
             
             #if epoch%5 == 0: self.get_conv_filters()
-            print("{} of {}, {:d} , {:.6f}, {:.6f} , {:.6f}".format(epoch+1, max_epochs, int(time.time()-start_time), training_error, validation_error, validation_accuracy/count*100))
+            print("{} of {} | {:d} | {:.6f} | {:.6f} | {:.6f}".format(epoch+1, max_epochs, int(time.time()-start_time), training_error, validation_error, validation_accuracy/count*100))
         
         net.get_conv_filters()
         #~ print("Test error: {:.6f}".format(self.validation_function(input_batch, labels_batch)))
