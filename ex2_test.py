@@ -108,18 +108,20 @@ class Network:
     def train(self, max_epochs):
         
         if self.train_images is None:
-            print("Need to load the data first")
+            print("Load the data first")
             return
         
-        input_data = T.tensor4('inputs')
+        input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
-        self.build_network(input_data)
+        self.build_network(input_var)
+		test_prediction = lasagne.layers.get_output(self.network, deterministic=True)
         loss = self.loss(labels)
         loss_test = self.loss_test(labels)
-        train_function = theano.function([input_data, labels], loss, updates=self.updates('sgd', loss, 0.3))
-        validation_function = theano.function([input_data, labels], loss_test)   # good?
+		test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1), target_var), dtype=theano.config.floatX)
+        train_function = theano.function([input_var, labels], loss, updates=self.updates('sgd', loss, 0.3))
+        validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
         
-        print("Training progress:")
+        print("Training ...")
         print("(epoch, training error, validation error)")
         for epoch in range(max_epochs):
             training_loss = 0
@@ -147,5 +149,5 @@ NETWORK TRAINING AND TESTING
 '''		
 net = Network()
 net.load_data()
-net.train(30)
+net.train(100)
 
