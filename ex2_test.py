@@ -105,7 +105,7 @@ class Network:
             
     
 class Trainer:
-    def __init__(self, net, batch_size):
+    def __init__(self, net):
         net.load_data()
         
         self.input_var = T.tensor4('inputs')
@@ -119,7 +119,7 @@ class Trainer:
         self.validation_function = theano.function([self.input_var, self.labels], self.loss_test)   #good?
 		
     # TODO: optimization scheme choice with parameter?
-    def train(self, max_epochs):
+    def train(self, max_epochs, batch_size):
         print("Training ...")
         print(" epoch | training error | validation error ")
         TRAINING_SET_SIZE = 200
