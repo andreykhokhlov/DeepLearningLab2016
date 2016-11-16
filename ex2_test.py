@@ -125,14 +125,14 @@ class Network:
             training_loss = 0
             count = 0
             num_of_training_batches = 0
-            for input_batch, labels_batch in self.batches(self.train_images[:20000,:,:,:], self.train_labels[:,20], self.batch_size):
+            for input_batch, labels_batch in self.batches(self.train_images[:2000,:,:,:], self.train_labels[:2000,20], self.batch_size):
                 training_loss += train_function(input_batch, labels_batch)
                 count += 1
             training_error = training_loss/count
             
             count = 0
             validation_loss = 0
-            for input_batch, labels_batch in self.batches(self.val_images[:5000,:,:,:], self.val_labels[:,20], self.batch_size):
+            for input_batch, labels_batch in self.batches(self.val_images[:500,:,:,:], self.val_labels[:500,20], self.batch_size):
                 validation_loss += validation_function(input_batch, labels_batch)
                 count += 1
             validation_error = validation_loss/count
