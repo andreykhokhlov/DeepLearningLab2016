@@ -111,7 +111,7 @@ class Network:
                 filter = (np.moveaxis(params[f,:,:,:], 0, 2)*255).astype('uint8')
                 #print(filter)
                 #print(filter.shape)
-                Image.fromarray(filter).save("filter_"+str(i)+"_"+str(f)+".png")
+                Image.fromarray(filter).save("filters/filter_"+str(i)+"_"+str(f)+".png")
             
             
     
