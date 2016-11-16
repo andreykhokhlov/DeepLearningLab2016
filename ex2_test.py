@@ -122,26 +122,35 @@ class Trainer:
     def train(self, max_epochs):
         print("Training ...")
         print(" epoch | training error | validation error ")
+        TRAINING_SET_SIZE = 200
+        VALIDATION_SET_SIZE = 50
         for epoch in range(max_epochs):
             training_loss = 0
             count = 0
             num_of_training_batches = 0
-            for input_batch, labels_batch in net.batches(net.train_images[:2000,:,:,:], net.train_labels[:2000,20], net.batch_size):
+            start_time = time.time()
+            for input_batch, labels_batch in self.batches(self.train_images[:TRAINING_SET_SIZE,:,:,:], self.train_labels[:TRAINING_SET_SIZE,20], batch_size):
+                start_time_batch = time.time()
                 training_loss += self.train_function(input_batch, labels_batch)
                 count += 1
+                #print(int(time.time()-start_time_batch))
             training_error = training_loss/count
             
             count = 0
             validation_loss = 0
-            for input_batch, labels_batch in net.batches(net.val_images[:500,:,:,:], net.val_labels[:500,20], net.batch_size):
-                validation_loss += self.validation_function (input_batch, labels_batch)
+            validation_accuracy = 0
+            for input_batch, labels_batch in self.batches(self.val_images[:VALIDATION_SET_SIZE,:,:,:], self.val_labels[:VALIDATION_SET_SIZE,20], batch_size):
+                val_err, val_acc = self.validation_function(input_batch, labels_batch)
+                validation_accuracy += val_acc
+                validation_loss += val_err
                 count += 1
             validation_error = validation_loss/count
-
-            print("{} of {}, {:.6f}, {:.6f}".format(epoch+1, max_epochs, training_error, validation_error))
+            
+            #if epoch%5 == 0: self.get_conv_filters()
+            print("{} of {}, {:d} , {:.6f}, {:.6f} , {:.6f}".format(epoch+1, max_epochs, int(time.time()-start_time), training_error, validation_error, validation_accuracy/count*100))
         
         net.get_conv_filters()
-        #~ print("Test error: {:.6f}".format(validation_function(input_batch, labels_batch)))
+        #~ print("Test error: {:.6f}".format(self.validation_function(input_batch, labels_batch)))
 
 '''
 NETWORK TRAINING AND TESTING
