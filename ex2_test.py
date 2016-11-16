@@ -114,7 +114,7 @@ class Trainer:
         test_pred = net.predict(deterministic = True)
         loss = net.loss(labels)
         loss_test = net.loss_test(labels)
-        test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
+        test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), labels), dtype=theano.config.floatX)
         train_function = theano.function([input_var, labels], loss, updates=self.updates('sgd', loss, 0.3))
         validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
     # TODO: optimization scheme choice with parameter?
