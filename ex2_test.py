@@ -112,9 +112,9 @@ class Trainer:
         
         input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
-		
+		deterministic = True
         net.build_network(input_var)
-		test_pred = net.predict(deterministic=True)
+		test_pred = net.predict(deterministic)
         loss = net.loss(labels)
         loss_test = net.loss_test(labels)
 		test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
