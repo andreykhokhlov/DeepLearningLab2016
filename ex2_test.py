@@ -109,9 +109,6 @@ class Trainer:
 		
 		
 		net.load_data()
-		if net.train_images is None:
-            print("Load the data first")
-            return
         
         input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
