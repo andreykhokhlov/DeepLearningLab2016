@@ -104,22 +104,31 @@ class Network:
             
             
     
-    # TODO: optimization scheme choice with parameter?
-    def train(self, max_epochs):
-        
-        if self.train_images is None:
+class Trainer:
+	def __init__(self, net):
+		
+		
+		net.load_data()
+		if net.train_images is None:
             print("Load the data first")
             return
         
         input_var = T.tensor4('inputs')
         labels = T.ivector('labels')
-        self.build_network(input_var)
+		
+        net.build_network(input_var)
+		
 		test_pred = predict(deterministic=True)
         loss = self.loss(labels)
         loss_test = self.loss_test(labels)
 		test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), target_var), dtype=theano.config.floatX)
         train_function = theano.function([input_var, labels], loss, updates=self.updates('sgd', loss, 0.3))
         validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
+		
+    # TODO: optimization scheme choice with parameter?
+    def train(self, max_epochs):
+        
+        
         
         print("Training ...")
         print("(epoch, training error, validation error)")
@@ -127,27 +136,27 @@ class Network:
             training_loss = 0
             count = 0
             num_of_training_batches = 0
-            for input_batch, labels_batch in self.batches(self.train_images[:2000,:,:,:], self.train_labels[:2000,20], self.batch_size):
+            for input_batch, labels_batch in net.batches(net.train_images[:2000,:,:,:], net.train_labels[:2000,20], net.batch_size):
                 training_loss += train_function(input_batch, labels_batch)
                 count += 1
             training_error = training_loss/count
             
             count = 0
             validation_loss = 0
-            for input_batch, labels_batch in self.batches(self.val_images[:500,:,:,:], self.val_labels[:500,20], self.batch_size):
+            for input_batch, labels_batch in net.batches(net.val_images[:500,:,:,:], net.val_labels[:500,20], net.batch_size):
                 validation_loss += validation_function(input_batch, labels_batch)
                 count += 1
             validation_error = validation_loss/count
             #self.get_conv_filters()
             print("{} of {}, {:.6f}, {:.6f}".format(epoch+1, max_epochs, training_error, validation_error))
         
-        self.get_conv_filters()
+        net.get_conv_filters()
         #~ print("Test error: {:.6f}".format(validation_function(input_batch, labels_batch)))
 
 '''
 NETWORK TRAINING AND TESTING
 '''		
 net = Network()
-net.load_data()
-net.train(100)
+trainer = Trainer()
+train.train(100)
 
