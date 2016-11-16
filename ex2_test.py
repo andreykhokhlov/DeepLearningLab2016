@@ -108,32 +108,33 @@ class Trainer:
     def __init__(self, net):
         net.load_data()
         
-        input_var = T.tensor4('inputs')
-        labels = T.ivector('labels')
-        net.build_network(input_var)
-        test_pred = net.predict(deterministic = True)
-        loss = net.loss(labels)
-        loss_test = net.loss_test(labels)
-        test_acc = T.mean(T.eq(T.argmax(test_pred, axis=1), labels), dtype=theano.config.floatX)
-        train_function = theano.function([input_var, labels], loss, updates=net.updates('sgd', loss, 0.3))
-        validation_function = theano.function([input_var, labels], [loss_test, test_acc])   # good?
+        self.input_var = T.tensor4('inputs')
+        self.labels = T.ivector('labels')
+        net.build_network(self.input_var)
+        self.test_pred = net.predict(deterministic = True)
+        self.loss = net.loss(self.labels)
+        self.loss_test = net.loss_test(self.labels)
+        self.test_acc = T.mean(T.eq(T.argmax(self.test_pred, axis=1), self.labels), dtype=theano.config.floatX)
+        self.train_function = theano.function([self.input_var, self.labels], self.loss, updates=net.updates('sgd', self.loss, 0.3))
+        self.validation_function = theano.function([self.input_var, self.labels], [self.loss_test, self.test_acc])   #better?
+		
     # TODO: optimization scheme choice with parameter?
     def train(self, max_epochs):
         print("Training ...")
-        print("(epoch, training error, validation error)")
+        print(" epoch | training error | validation error ")
         for epoch in range(max_epochs):
             training_loss = 0
             count = 0
             num_of_training_batches = 0
             for input_batch, labels_batch in net.batches(net.train_images[:2000,:,:,:], net.train_labels[:2000,20], net.batch_size):
-                training_loss += train_function(input_batch, labels_batch)
+                training_loss += self.train_function(input_batch, labels_batch)
                 count += 1
             training_error = training_loss/count
             
             count = 0
             validation_loss = 0
             for input_batch, labels_batch in net.batches(net.val_images[:500,:,:,:], net.val_labels[:500,20], net.batch_size):
-                validation_loss += validation_function(input_batch, labels_batch)
+                validation_loss += self.validation_function (input_batch, labels_batch)
                 count += 1
             validation_error = validation_loss/count
 
