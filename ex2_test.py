@@ -71,6 +71,7 @@ labels = T.ivector('labels')
 build_network(input_data)
 
 prediction = lasagne.layers.get_output(network)
+
 loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
 loss = loss.mean()
 
@@ -80,7 +81,6 @@ updates = lasagne.updates.nesterov_momentum(loss, params, learning_rate = 0.01, 
 test_prediction = lasagne.layers.get_output(network, deterministic = True)
 test_loss = lasagne.objectives.categorical_crossentropy(test_prediction, target_var)
 test_loss = test_loss.mean()
-
 test_acc = T.mean(T.eq(T.argmax(test_prediction, axis = 1), target_var), dtype = theano.config.floatX)
 
 train_fn = theano.function([input_var, target_var], loss, updates=updates)
