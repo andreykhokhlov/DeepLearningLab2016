@@ -149,6 +149,6 @@ class Trainer:
 NETWORK TRAINING AND TESTING
 '''
 net = Network()
-trainer = Trainer()
+trainer = Trainer(net)
 train.train(100)
 
