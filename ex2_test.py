@@ -114,7 +114,6 @@ class Trainer:
         labels = T.ivector('labels')
 		
         net.build_network(input_var)
-		
 		test_pred = predict(deterministic=True)
         loss = self.loss(labels)
         loss_test = self.loss_test(labels)
