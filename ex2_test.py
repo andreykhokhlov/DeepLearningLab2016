@@ -147,5 +147,5 @@ NETWORK TRAINING AND TESTING
 '''
 net = Network()
 trainer = Trainer(net)
-train.train(100)
+trainer.train(100)
 
