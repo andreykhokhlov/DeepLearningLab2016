@@ -51,7 +51,7 @@ class Network:
         network = lasagne.layers.InputLayer((None, 3, 32, 32), input_var=input_data)
         conv_layer_1 = lasagne.layers.Conv2DLayer(network, num_filters=28, filter_size=(5, 5), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_1, pool_size=(2, 2))
-		network = lasagne.layers.DenseLayer(network, num_units=24, nonlinearity=lasagne.nonlinearities.rectify)
+        network = lasagne.layers.DenseLayer(network, num_units=24, nonlinearity=lasagne.nonlinearities.rectify)
         conv_layer_2 = lasagne.layers.Conv2DLayer(network, num_filters=20, filter_size=(5, 5), nonlinearity=lasagne.nonlinearities.rectify, W=lasagne.init.GlorotUniform())
         network = lasagne.layers.MaxPool2DLayer(conv_layer_2, pool_size=(2, 2))
         network = lasagne.layers.DenseLayer(network, num_units=14, nonlinearity=lasagne.nonlinearities.rectify)
