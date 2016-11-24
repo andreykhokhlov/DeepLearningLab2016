@@ -103,6 +103,11 @@ class Network:
                 Image.fromarray(filter).save("filters/filter_"+str(i)+"_"+str(f)+".png")
             
             
+    def regularized_loss(self, labels):
+        loss_raw = self.loss(labels)
+        l2_penalty = lasagne.regularization.l2(self.predict())
+        l1_penalty = lasagne.regularization.l2(self.predict())
+        return loss_raw + 1e-4*l2_penalty + 1e-4*l1_penalty
     
 class Trainer:
     def __init__(self, net):
@@ -112,7 +117,11 @@ class Trainer:
         self.labels = T.ivector('labels')
         net.build_network(self.input_var)
         self.test_pred = net.predict(deterministic = True)
-        self.loss = net.loss(self.labels)
+        
+        #self.loss = net.loss(self.labels)
+        #testing regularization
+        self.loss = net.regularized_loss(self.labels)
+        
         self.loss_test = net.loss_test(self.labels)
         self.test_acc = T.mean(T.eq(T.argmax(self.test_pred, axis=1), self.labels), dtype=theano.config.floatX)
         self.train_function = theano.function([self.input_var, self.labels], self.loss, updates=net.updates('sgd', self.loss, 0.3))
